@@ -1,30 +1,31 @@
-import React, { useEffect,useState } from 'react';
-import './App.css';
-import CurrencyRow from './CurrencyRow';
-
-const BASE_URL = 'https://api.exchangeratesapi.io/latest';
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import axios from "axios";
+import InputRow from "./InputRow";
+import OutputRow from "./OutputRow";
 
 export default function App() {
-    const [currencyOptions, setCurrencyOptions] = useState([]);
+  const [currencyOptions, setCurrencyOptions] = useState([]);
+  const [inputVal, setInputVal] = useState({
+    val: "",
+    rate: "",
+  });
 
-    useEffect(() => {
-        fetch(BASE_URL)
-            .then(res => res.json())
-            .then(data => {
-                setCurrencyOptions([data.base, ...Object.keys(data.rates)])
-            })
-    }, [])
+  useEffect(() => {
+    const getData = async () => {
+      const data = await axios.get("https://api.exchangerate.host/latest");
 
-    return (
-        <div className='App'>
-            <h1>Convert</h1>
-            <CurrencyRow 
-                currencyOptions={currencyOptions}
-            />
-            <div className='equals'>=</div>
-            <CurrencyRow 
-                currencyOptions={currencyOptions}
-            />
-        </div>
+      setCurrencyOptions(data.data.rates);
+    };
+    getData();
+  }, []);
+
+  return (
+    <div className="App">
+      <h1>Convert</h1>
+      <InputRow setInputVal={setInputVal} currencyOptions={currencyOptions} />
+      <div className="equals">=</div>
+      <OutputRow inputVal={inputVal} currencyOptions={currencyOptions} />
+    </div>
   );
 }
