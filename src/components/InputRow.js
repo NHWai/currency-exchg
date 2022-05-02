@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
+import CurrencyContext from "../context/currencyContext";
 
-export default function InputRow({ currencyOptions, setInputVal }) {
+export default function InputRow() {
+  const { currencyOptions, setInputVal } = useContext(CurrencyContext);
+
   function getInput(e) {
     const rate = currencyOptions[e.target.value];
     setInputVal((pre) => {

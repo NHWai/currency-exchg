@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import CurrencyContext from "../context/currencyContext";
 
-export default function Output({ currencyOptions, inputVal }) {
+export default function Output() {
+  const { currencyOptions, inputVal } = useContext(CurrencyContext);
+
   const [rate, setRate] = useState("");
   const [outputVal, setOutputVal] = useState("");
-  console.log(inputVal, rate, outputVal);
 
   useEffect(() => {
     const truVal = inputVal.val * (rate / inputVal.rate);
-    console.log(truVal);
+
     setOutputVal(truVal);
   }, [rate, inputVal]);
 
@@ -21,7 +23,9 @@ export default function Output({ currencyOptions, inputVal }) {
 
   return (
     <div>
-      <span className="span">{outputVal ? Math.round(outputVal) : "---"}</span>
+      <span className="span">
+        {outputVal ? outputVal.toLocaleString() : "---"}
+      </span>
       <select onChange={(e) => setRate(currencyOptions[e.target.value])}>
         <option> Choose</option>
         {renderedItems}
